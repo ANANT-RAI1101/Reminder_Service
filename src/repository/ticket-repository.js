@@ -1,21 +1,22 @@
-const { NotificationTicket } = require('../models/index');
+const {notificationticket}  = require('../models/index');
 const { Op } = require("sequelize");
 
 class TicketRepository{
 
     async create(data){
         try {
-            const response=await NotificationTicket.create(data);
+            console.log(data)
+            const response=await notificationticket.create(data);
             return response;
         } catch (error) {
-            console.log("repository layer error")
+            console.log("repository layer error",error)
             throw error;
         }
     }
 
     async get(filter){
         try {
-           const response=await NotificationTicket.findAll({
+           const response=await notificationticket.findAll({
             where:{
                 status:filter.status,
                 notificationTime:{
@@ -32,7 +33,7 @@ class TicketRepository{
 
     async update(ticketId,data){
         try {
-           const response= await NotificationTicket.update(data,{
+           const response= await notificationticket.update(data,{
             where:{
                 id:ticketId
             }
