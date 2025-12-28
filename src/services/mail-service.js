@@ -20,12 +20,17 @@ const sendEmail = async (mailFrom, mailTo, mailSubject, mailBody) => {
 
 const create = async (data) => {
     try {
+        
         const response = await ticketRepository.create(data);
         return response;
     } catch (error) {
         console.log("service layer error");
         throw error;
-    }
+    } 
+}
+
+const subscribeEvent=async(payload)=>{
+    await create(payload);
 }
 
 const update = async (ticketId, data) => {
@@ -53,5 +58,6 @@ module.exports = {
     sendEmail,
     create,
     update,
-    fetchPendingMail
+    fetchPendingMail,
+    subscribeEvent
 }

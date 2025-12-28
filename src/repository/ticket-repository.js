@@ -1,44 +1,50 @@
-const {notificationticket}  = require('../models/index');
-const { Op } = require("sequelize");
+const { notificationticket } = require('../models/index');
+const { Op } = require("sequelize"); 
 
-class TicketRepository{
+class TicketRepository {
 
-    async create(data){
+    async create(data) {
         try {
-            console.log(data)
-            const response=await notificationticket.create(data);
+            
+            const response = await notificationticket.create({
+                subject: data.subject,
+                content: data.content,
+                recepientEmail: data.recepientEmail,  
+                status: data.status,
+                notificationTime: data.notificationTime
+            });
             return response;
         } catch (error) {
-            console.log("repository layer error",error)
+            console.log("repository layer error", error)
             throw error;
         }
     }
 
-    async get(filter){
+    async get(filter) {
         try {
-           const response=await notificationticket.findAll({
-            where:{
-                status:filter.status,
-                notificationTime:{
-                    [Op.lte]:new Date()
+            const response = await notificationticket.findAll({
+                where: {
+                    status: filter.status,
+                    notificationTime: {
+                        [Op.lte]: new Date()
+                    }
                 }
-            }
-           });
-           return response;
+            });
+            return response;
         } catch (error) {
             console.log("repository layer error");
             throw error;
         }
     }
 
-    async update(ticketId,data){
+    async update(ticketId, data) {
         try {
-           const response= await notificationticket.update(data,{
-            where:{
-                id:ticketId
-            }
-        });
-        return response; 
+            const response = await notificationticket.update(data, {
+                where: {
+                    id: ticketId
+                }
+            });
+            return response;
         } catch (error) {
             console.log("repository layer error");
             throw error;
@@ -46,4 +52,4 @@ class TicketRepository{
     }
 }
 
-module.exports= TicketRepository;
+module.exports = TicketRepository;
