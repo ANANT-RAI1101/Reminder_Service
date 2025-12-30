@@ -20,16 +20,16 @@ const sendEmail = async (mailFrom, mailTo, mailSubject, mailBody) => {
 
 const create = async (data) => {
     try {
-        
+
         const response = await ticketRepository.create(data);
         return response;
     } catch (error) {
         console.log("service layer error");
         throw error;
-    } 
+    }
 }
 
-const subscribeEvent=async(payload)=>{
+const subscribeEvent = async (payload) => {
     await create(payload);
 }
 
@@ -40,7 +40,7 @@ const update = async (ticketId, data) => {
     } catch (error) {
         console.log("service layer error");
         throw error;
-        
+
     }
 }
 
@@ -54,10 +54,23 @@ const fetchPendingMail = async () => {
     }
 }
 
+const fetchMail = async () => {
+    try {
+        const now = new Date();
+        const twoHoursLater = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+        const response = await ticketRepository.fetchMail(twoHoursLater);
+        return response;
+    } catch (error) {
+        console.log("service layer error");
+        throw error;
+    }
+}
+
 module.exports = {
     sendEmail,
     create,
     update,
     fetchPendingMail,
-    subscribeEvent
+    subscribeEvent,
+    fetchMail
 }

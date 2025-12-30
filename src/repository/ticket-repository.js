@@ -1,17 +1,18 @@
 const { notificationticket } = require('../models/index');
-const { Op } = require("sequelize"); 
+const { Op } = require("sequelize");
 
 class TicketRepository {
 
     async create(data) {
         try {
-            
+
             const response = await notificationticket.create({
                 subject: data.subject,
                 content: data.content,
-                recepientEmail: data.recepientEmail,  
+                recepientEmail: data.recepientEmail,
                 status: data.status,
-                notificationTime: data.notificationTime
+                notificationTime: data.notificationTime,
+                departureTime: data.departureTime
             });
             return response;
         } catch (error) {
@@ -48,6 +49,21 @@ class TicketRepository {
         } catch (error) {
             console.log("repository layer error");
             throw error;
+        }
+    }
+
+    async fetchMail(time) {
+        try {
+            const response = await notificationticket.findAll({
+                where: {
+                    departureTime: {
+                        [Op.lte]: time
+                    }
+                }
+            })
+            return response;
+        } catch (error) {
+            throw error
         }
     }
 }

@@ -24,4 +24,25 @@ const setupJobs = () => {
     })
 }
 
-module.exports=setupJobs;
+const priorNoti=()=>{
+    cron.schedule('*/2 * * * *',async()=>{
+        const response=await emailService.fetchMail();
+        response.forEach((email)=>{
+            sender.sendMail({
+                to:email.recepientEmail,
+                subject:"flight is in next 2 hrs",
+                text:email.content
+            },async(err,data)=>{
+                if(err){
+                    console.log(err); 
+                }
+        });
+        });
+        console.log(response);
+    })
+}
+
+module.exports={
+    setupJobs,
+    priorNoti
+};

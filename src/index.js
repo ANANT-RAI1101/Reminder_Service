@@ -2,7 +2,7 @@ const express=require('express');
 const bodyParser=require("body-parser");
 const{PORT}=require("./config/server-config");
 const ApiRoute=require("./routes/index");
-const job = require('./utils/jobs');
+const {setupJobs,priorNoti} = require('./utils/jobs');
 const {createChannel, subscribeMessage}=require("./utils/message-queue");
 const { REMINDER_BINDING_KEY }  = require('./config/server-config');
 const {subscribeEvent}=require("./services/mail-service")
@@ -15,7 +15,8 @@ const setupAndRunServer=async()=>{
     subscribeMessage(channel,subscribeEvent,REMINDER_BINDING_KEY);
     app.listen(PORT,async()=>{
         console.log(`server is running at port ${PORT}`);
-        job();   
+        setupJobs();
+        priorNoti();   
     })
 }
 
